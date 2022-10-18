@@ -45,5 +45,7 @@ while not game_over:
         if ev.type==pygame.QUIT:
             pygame.quit()
             game_over = True
+        if ev.type == pygame.K_w:
+            player.forward()
     player.draw()
     pygame.display.update()
