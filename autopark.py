@@ -11,6 +11,7 @@ RED = (255,0,0)
 BLUE = (0,0,255)
 GREEN = (0,255,0)
 GRAY = (100,100,100)
+display = pygame.display
 screen = pygame.display.set_mode((1920,1030))
 
 def rectRotated( surface, color, pos, fill, border_radius, angle ):
