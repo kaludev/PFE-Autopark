@@ -46,18 +46,14 @@ class Player:
     def backward(self):
         self.x -= self.speed * float(math.sin((self.angle+90)*(math.pi/180)))
         self.y -= self.speed * float(math.cos((self.angle+90)*(math.pi/180)))
-player = Player(500,400,100,40,0,0.1)
+player = Player(500,400,100,40,0,0.3)
 while not game_over:
     events = pygame.event.get()
-    for ev in events:
-        if ev.type==pygame.QUIT:
-            pygame.quit()
-            game_over = True
-        if ev.type == pygame.KEYDOWN:
-            if ev.key == pygame.K_ESCAPE:
-                pygame.quit()
-                game_over = True
     keys = pygame.key.get_pressed()  
+    if keys[pygame.K_LSHIFT]:
+        player.speed = 1
+    else:
+        player.speed = 0.3 
     if keys[pygame.K_w]:
         player.forward()
         if keys[pygame.K_a]:
@@ -73,3 +69,12 @@ while not game_over:
     screen.fill(BLACK)
     player.draw()
     pygame.display.update()
+    for ev in events:
+        if ev.type==pygame.QUIT:
+            pygame.quit()
+            game_over = True
+        if ev.type == pygame.KEYDOWN:
+            if ev.key == pygame.K_ESCAPE:
+                pygame.quit()
+                game_over = True
+    
