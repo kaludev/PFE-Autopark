@@ -23,9 +23,27 @@ def rectRotated( surface, color, pos, fill, border_radius, angle ):
     s = s.convert_alpha()
     s.fill((0,0,0,0))
     pygame.draw.rect(s, color,(0,0,pos[2],pos[3]),fill, border_radius=border_radius)
-    s = pygame.transform.rotate(s,angle)
-    surface.blit( s, (pos[0],pos[1]) )      
-    
+    offset = pygame.math.Vector2(25,30)
+    s,p,center = rotate(s,angle,(pos[0],pos[1]),offset)
+    pygame.draw.circle(screen,GREEN,center=center,radius=4)
+    surface.blit( s,p )    
+
+def rotate(surface, angle, pivot, offset):
+    """Rotate the surface around the pivot point.
+
+    Args:
+        surface (pygame.Surface): The surface that is to be rotated.
+        angle (float): Rotate by this angle.
+        pivot (tuple, list, pygame.math.Vector2): The pivot point.
+        offset (pygame.math.Vector2): This vector is added to the pivot.
+    """
+    rotated_image = pygame.transform.rotozoom(surface, angle, 1)  # Rotate the image.
+    rotated_offset = offset.rotate(-angle)  # Rotate the offset vector.
+    # Add the offset vector to the center/pivot point to shift the rect.
+    center=pivot+rotated_offset
+    rect = rotated_image.get_rect(center=center)
+    return rotated_image, rect,center  # Return the rotated image and shifted rect.
+
 class Player:
     def __init__(self,x,y,a,b,angle,speed):
         self.x = x
@@ -40,9 +58,9 @@ class Player:
     def draw(self):
         rectRotated(screen,WHITE,(int(self.x),int(self.y),self.a,self.b),0,15,self.angle)
     def rotatep(self):
-        self.angle +=0.1
+        self.angle +=0.5
     def rotaten(self):
-        self.angle -=0.1
+        self.angle -=0.5
     def backward(self):
         self.x -= self.speed * float(math.sin((self.angle+90)*(math.pi/180)))
         self.y -= self.speed * float(math.cos((self.angle+90)*(math.pi/180)))
@@ -68,6 +86,7 @@ while not game_over:
             player.rotatep()
     screen.fill(BLACK)
     player.draw()
+    pygame.draw.circle(screen,GREEN,center=(player.x,player.y),radius=4)
     pygame.display.update()
     for ev in events:
         if ev.type==pygame.QUIT:
