@@ -13,6 +13,7 @@ GREEN = (0,255,0)
 GRAY = (100,100,100)
 display = pygame.display
 screen = pygame.display.set_mode((1920,1030))
+clock = pygame.time.Clock()
 
 def rectRotated( surface, color, pos, fill, border_radius, angle ):
     """
@@ -25,7 +26,7 @@ def rectRotated( surface, color, pos, fill, border_radius, angle ):
     pygame.draw.rect(s, color,(0,0,pos[2],pos[3]),fill, border_radius=border_radius)
     offset = pygame.math.Vector2(25,30)
     s,p,center = rotate(s,angle,(pos[0],pos[1]),offset)
-    pygame.draw.circle(screen,GREEN,center=center,radius=4)
+    #pygame.draw.circle(screen,GREEN,center=center,radius=4)
     surface.blit( s,p )    
 
 def rotate(surface, angle, pivot, offset):
@@ -58,20 +59,20 @@ class Player:
     def draw(self):
         rectRotated(screen,WHITE,(int(self.x),int(self.y),self.a,self.b),0,15,self.angle)
     def rotatep(self):
-        self.angle +=0.5
+        self.angle +=1.5
     def rotaten(self):
-        self.angle -=0.5
+        self.angle -=1.5
     def backward(self):
         self.x -= self.speed * float(math.sin((self.angle+90)*(math.pi/180)))
         self.y -= self.speed * float(math.cos((self.angle+90)*(math.pi/180)))
-player = Player(500,400,100,40,0,0.3)
+player = Player(500,400,100,40,0,5)
 while not game_over:
     events = pygame.event.get()
     keys = pygame.key.get_pressed()  
     if keys[pygame.K_LSHIFT]:
-        player.speed = 1
+        player.speed = 10
     else:
-        player.speed = 0.3 
+        player.speed = 5 
     if keys[pygame.K_w]:
         player.forward()
         if keys[pygame.K_a]:
@@ -86,7 +87,8 @@ while not game_over:
             player.rotatep()
     screen.fill(BLACK)
     player.draw()
-    pygame.draw.circle(screen,GREEN,center=(player.x,player.y),radius=4)
+    #pygame.draw.circle(screen,GREEN,center=(player.x,player.y),radius=4)
+    clock.tick(30)
     pygame.display.update()
     for ev in events:
         if ev.type==pygame.QUIT:
