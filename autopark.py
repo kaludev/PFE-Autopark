@@ -59,9 +59,9 @@ class Player:
     def draw(self):
         rectRotated(screen,WHITE,(int(self.x),int(self.y),self.a,self.b),0,15,self.angle)
     def rotatep(self):
-        self.angle +=2.5
+        self.angle +=self.speed *0.5
     def rotaten(self):
-        self.angle -=2.5
+        self.angle -=self.speed *0.5
     def backward(self):
         self.x -= self.speed * float(math.sin((self.angle+90)*(math.pi/180)))
         self.y -= self.speed * float(math.cos((self.angle+90)*(math.pi/180)))
@@ -72,7 +72,7 @@ while not game_over:
     if keys[pygame.K_LSHIFT]:
         player.speed = 10
     else:
-        player.speed = 5 
+        player.speed = 6 
     if keys[pygame.K_w] or keys[pygame.K_UP]:
         player.forward()
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
